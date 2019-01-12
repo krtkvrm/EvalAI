@@ -350,6 +350,54 @@ class BaseAPITestClass(APITestCase):
                                     'status': 'submitting', 'input_file': self.input_file}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_challenge_submission_when_daily_limit_exceeded(self):
+        self.url = reverse_lazy('jobs:challenge_submission',
+                                kwargs={'challenge_id': self.challenge.pk,
+                                        'challenge_phase_id': self.challenge_phase.pk})
+        actual_daily_submissions_limit = self.challenge_phase.max_submissions_per_day
+        self.challenge_phase.max_submissions = 0
+        self.challenge_phase.save()
+
+        response = self.client.post(self.url, {
+                                    'status': 'submitting', 'input_file': self.input_file}, format="multipart")
+        self.challenge_phase.max_submissions_per_day = actual_daily_submissions_limit
+        self.challenge_phase.save()
+        expected = {'error': 'The maximum number of submission for today has been reached'}
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data, expected)
+
+    def test_challenge_submission_when_monthly_limit_exceeded(self):
+        self.url = reverse_lazy('jobs:challenge_submission',
+                                kwargs={'challenge_id': self.challenge.pk,
+                                        'challenge_phase_id': self.challenge_phase.pk})
+        actual_maximum_submissions_per_month = self.challenge_phase.max_submissions_per_month
+        self.challenge_phase.max_submissions = 0
+        self.challenge_phase.save()
+
+        response = self.client.post(self.url, {
+                                    'status': 'submitting', 'input_file': self.input_file}, format="multipart")
+        self.challenge_phase.max_submissions = actual_maximum_submissions_per_month
+        self.challenge_phase.save()
+        expected = {'error': 'The maximum number of submission for this Month has been reached'}
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data, expected)
+
+    def test_challenge_submission_when_maximum_limit_exceeded(self):
+        self.url = reverse_lazy('jobs:challenge_submission',
+                                kwargs={'challenge_id': self.challenge.pk,
+                                        'challenge_phase_id': self.challenge_phase.pk})
+        actual_maximum_submissions = self.challenge_phase.max_submissions
+        self.challenge_phase.max_submissions = 0
+        self.challenge_phase.save()
+
+        response = self.client.post(self.url, {
+                                    'status': 'submitting', 'input_file': self.input_file}, format="multipart")
+        self.challenge_phase.max_submissions = actual_maximum_submissions
+        self.challenge_phase.save()
+        expected = {'error': 'The maximum number of submissions has been reached'}
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data, expected)
+
 
 class GetChallengeSubmissionTest(BaseAPITestClass):
 
