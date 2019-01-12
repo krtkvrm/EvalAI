@@ -355,8 +355,10 @@ class BaseAPITestClass(APITestCase):
                                 kwargs={'challenge_id': self.challenge.pk,
                                         'challenge_phase_id': self.challenge_phase.pk})
         actual_daily_submissions_limit = self.challenge_phase.max_submissions_per_day
-        self.challenge_phase.max_submissions = 0
+        self.challenge_phase.max_submissions_per_day = 0
         self.challenge_phase.save()
+        self.challenge.participant_teams.add(self.participant_team)
+        self.challenge.save()
 
         response = self.client.post(self.url, {
                                     'status': 'submitting', 'input_file': self.input_file}, format="multipart")
@@ -371,12 +373,14 @@ class BaseAPITestClass(APITestCase):
                                 kwargs={'challenge_id': self.challenge.pk,
                                         'challenge_phase_id': self.challenge_phase.pk})
         actual_maximum_submissions_per_month = self.challenge_phase.max_submissions_per_month
-        self.challenge_phase.max_submissions = 0
+        self.challenge_phase.actual_maximum_submissions_per_month = 0
         self.challenge_phase.save()
+        self.challenge.participant_teams.add(self.participant_team)
+        self.challenge.save()
 
         response = self.client.post(self.url, {
                                     'status': 'submitting', 'input_file': self.input_file}, format="multipart")
-        self.challenge_phase.max_submissions = actual_maximum_submissions_per_month
+        self.challenge_phase.actual_maximum_submissions_per_month = actual_maximum_submissions_per_month
         self.challenge_phase.save()
         expected = {'error': 'The maximum number of submission for this Month has been reached'}
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -389,6 +393,8 @@ class BaseAPITestClass(APITestCase):
         actual_maximum_submissions = self.challenge_phase.max_submissions
         self.challenge_phase.max_submissions = 0
         self.challenge_phase.save()
+        self.challenge.participant_teams.add(self.participant_team)
+        self.challenge.save()
 
         response = self.client.post(self.url, {
                                     'status': 'submitting', 'input_file': self.input_file}, format="multipart")
