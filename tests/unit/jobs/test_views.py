@@ -365,6 +365,7 @@ class BaseAPITestClass(APITestCase):
         self.challenge_phase.max_submissions_per_day = actual_daily_submissions_limit
         self.challenge_phase.save()
         expected = {'error': 'The maximum number of submission for today has been reached'}
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data, expected)
 
@@ -383,6 +384,7 @@ class BaseAPITestClass(APITestCase):
         self.challenge_phase.actual_maximum_submissions_per_month = actual_maximum_submissions_per_month
         self.challenge_phase.save()
         expected = {'error': 'The maximum number of submission for this Month has been reached'}
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data, expected)
 
@@ -401,6 +403,7 @@ class BaseAPITestClass(APITestCase):
         self.challenge_phase.max_submissions = actual_maximum_submissions
         self.challenge_phase.save()
         expected = {'error': 'The maximum number of submissions has been reached'}
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response.data, expected)
 
