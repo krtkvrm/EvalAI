@@ -71,16 +71,16 @@ class LeaderboardAdmin(ImportExportTimeStampedAdmin):
 
 @admin.register(LeaderboardData)
 class LeaderboardDataAdmin(ImportExportTimeStampedAdmin):
-    list_display = ('get_challenge', 'challenge_phase_split', 'submission', 'leaderboard', 'result',)
+    list_display = ('challenge_phase_split', 'submission', 'leaderboard', 'result',)
     list_filter = ('challenge_phase_split', 'created_at', 'modified_at',)
     search_fields = ('challenge_phase_split__challenge_phase__name',
                      'submission__participant_team__team_name', 'leaderboard__schema', 'result',)
 
-    def get_challenge(self, obj):
-        """Returns challenge name corresponding to leaderboard data entry"""
-        return obj.challenge_phase.challenge
-    get_challenge.short_description = 'Challenge'
-    get_challenge.admin_order_field = 'challenge_phase__challenge'
+    # def get_challenge(self, obj):
+    #     """Returns challenge name corresponding to leaderboard data entry"""
+    #     return obj.challenge_phase.challenge
+    # get_challenge.short_description = 'Challenge'
+    # get_challenge.admin_order_field = 'challenge_phase__challenge'
 
 
 @admin.register(StarChallenge)

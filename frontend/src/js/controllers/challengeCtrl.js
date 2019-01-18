@@ -45,6 +45,10 @@
         vm.loaderTitle = '';
         vm.loaderContainer = angular.element('.exist-team-card');
 
+        vm.activateCollapsible = function() {
+            angular.element('.collapsible').collapsible();
+        };
+
         // show loader
         vm.startLoader = loaderService.startLoader;
         // stop loader
@@ -430,6 +434,7 @@
         vm.isResult = false;
 
         vm.getLeaderboard = function(phaseSplitId) {
+            vm.activateCollapsible();
             vm.stopLeaderboard = function() {
                 $interval.cancel(vm.poller);
             };

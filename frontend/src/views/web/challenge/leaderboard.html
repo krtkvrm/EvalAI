@@ -76,13 +76,26 @@
                                         </td>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr ng-repeat="key in challenge.leaderboard|orderBy:challenge.sortFunction:challenge.reverseSort">
-                                        <td class="align-left">{{challenge.initial_ranking[key.submission__participant_team__team_name]}}</td>
-                                        <td class="font-weight-b align-left">{{key.submission__participant_team__team_name}}</td>
-                                        <td class="align-center" ng-repeat="score in key.result track by $index" >{{score | number : 2}}</td>
-                                        <td class="align-center">{{ key.submission__submitted_at | number: 0}}&nbsp;{{key.timeSpan}} ago</td>
-                                    </tr>
+                                    <tbody class="collapsible" data-collapsible="accordion">
+                                        <tr ng-repeat="key in challenge.leaderboard|orderBy:challenge.sortFunction:challenge.reverseSort">
+                                            <td>
+                                                <div class="collapsible-header exist-team-card">
+                                                    <input type="radio" name="selectParticipantTeam" class="with-gap selectTeam" id="{{key.id}}" value={{key.id}} ng-model="challengeParticipantTeams.challengeParticipantTeams">
+                                                    <label for="{{key.id}}"></label>
+                                                    <div class="show-member-title pointer">
+                                                        <td >{{challenge.initial_ranking[key.submission__participant_team__team_name]}}</td>
+                                                        <td class="font-weight-b">{{key.submission__participant_team__team_name}}</td>
+                                                        <td ng-repeat="score in key.result track by $index" >{{score | number : 2}}</td>
+                                                        <td>{{ key.submission__submitted_at | number: 0}}&nbsp;{{key.timeSpan}} ago</td>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="collapsible-body">
+                                                    <h6><b>Team Members:</b></h6>
+                                                    <p ng-repeat="member in value.members">{{member.user}}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 <div ng-if="challenge.isResult && challenge.leaderboard.error">

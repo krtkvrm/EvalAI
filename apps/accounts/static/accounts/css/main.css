@@ -53,6 +53,7 @@ input[type="radio"].selectTeam + label {
   vertical-align: middle;
 }
 
+
 [type="radio"]:checked + label:after,
 [type="radio"].with-gap:checked + label:after {
   background-color: #252833;
