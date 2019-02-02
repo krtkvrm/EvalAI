@@ -568,7 +568,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
                                 })
         expected = {
             'remaining_submissions_today_count': 9,
-            'remaining_submissions_this_month_count': 18,
+            'remaining_submissions_this_month_count': 19,
             'remaining_submissions': 98
         }
 
