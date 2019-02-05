@@ -1096,15 +1096,13 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
                                         'challenge_phase_pk': self.challenge_phase.pk,
                                         'submission_pk': self.submission.pk})
 
-        self.data = {
+        self.date = {
             'baseline_submission': True
         }
-        self.client.force_authenticate(user=self.submission.created_by)
+        self.client.force_authenticate(user=self.user)
         self.challenge.participant_teams.add(self.participant_team)
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.client.force_authenticate(user=self.user)
 
     def test_get_submission_by_pk_when_submission_doesnt_exist(self):
         self.url = reverse_lazy('jobs:get_submission_by_pk',
