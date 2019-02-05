@@ -1090,6 +1090,22 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_change_submission_baseline_when_user_is_host(self):
+        self.url = reverse_lazy('jobs:change_submission_data_and_visibility',
+                                kwargs={'challenge_pk': self.challenge.pk,
+                                        'challenge_phase_pk': self.challenge_phase.pk,
+                                        'submission_pk': self.submission.pk})
+
+        self.data = {
+            'baseline_submission': True
+        }
+        self.challenge.participant_teams.add(self.participant_team)
+        self.challenge.participant_teams.add(self.participant_team)
+        response = self.client.patch(self.url, self.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.user)
+
     def test_get_submission_by_pk_when_submission_doesnt_exist(self):
         self.url = reverse_lazy('jobs:get_submission_by_pk',
                                 kwargs={'submission_id': self.submission.id + 2})
