@@ -1096,7 +1096,7 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
                                         'challenge_phase_pk': self.challenge_phase.pk,
                                         'submission_pk': self.submission.pk})
 
-        self.date = {
+        self.data = {
             'baseline_submission': True
         }
         self.client.force_authenticate(user=self.user)
