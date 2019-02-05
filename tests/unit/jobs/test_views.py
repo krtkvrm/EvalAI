@@ -1099,7 +1099,7 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         self.data = {
             'baseline_submission': True
         }
-        self.challenge.participant_teams.add(self.participant_team)
+        self.client.force_authenticate(user=self.submission.created_by)
         self.challenge.participant_teams.add(self.participant_team)
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
