@@ -49,6 +49,10 @@ class Challenge(TimeStampedModel):
     allowed_email_domains = ArrayField(
         models.CharField(max_length=50, blank=True),
         default=[], blank=True)
+    allowed_files = ArrayField(
+        models.CharField(max_length=50, blank=True),
+        default=['zip', 'json']
+    )
     blocked_email_domains = ArrayField(
         models.CharField(max_length=50, blank=True),
         default=[], blank=True)
