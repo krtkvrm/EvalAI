@@ -1,7 +1,7 @@
 asgi-redis==1.4.3
 boto3==1.7.31
 botocore==1.10.12
-commonmark==0.5.4
+commonmark==0.8.1
 django==1.11.18
 django-import-export==0.5.1
 djangorestframework==3.7.7
