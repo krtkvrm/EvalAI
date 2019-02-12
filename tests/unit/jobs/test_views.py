@@ -826,9 +826,8 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_all_phases_remaining(self):
-        self.url = reverse_lazy('jobs:get_remaining_submissions',
+        self.url = reverse_lazy('jobs:get_remaining_submissions_for_all_phases',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 15)
