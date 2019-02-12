@@ -833,7 +833,8 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         setattr(self.challenge_phase, 'max_submissions_per_day', 15)
         setattr(self.challenge_phase, 'max_submissions_per_month', 13)
         self.challenge_phase.save()
-
+        print(self.participant_team.team_name)
+        print(self.participant_team.id)
         expected = {
             'remaining_submissions_today_count': 11,
             'remaining_submissions_this_month_count': 11,
