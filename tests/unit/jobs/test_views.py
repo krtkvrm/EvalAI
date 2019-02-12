@@ -838,6 +838,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
             'participant_team_id': self.participant_team.id,
             'phases': [{
                 'name': self.challenge_phase.name,
+                'id': self.challenge_phase.id,
                 'start_date': self.challenge_phase.start_date,
                 'end_date': self.challenge_phase.end_date,
                 'message': {
