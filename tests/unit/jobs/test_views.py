@@ -923,11 +923,9 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
                 }
             }]
         }
-        self.maxDiff = None
         self.challenge.participant_teams.add(self.participant_team)
         self.challenge.save()
         response = self.client.get(self.url, {})
-        print(response.data)
         self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
