@@ -366,7 +366,6 @@ class BaseAPITestClass(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.challenge_phase.max_submissions = actual_maxinmum_submissions
         self.challenge_phase.save()
-    self.self.maxDiff = None
     def test_challenge_submission_for_docker_based_challenges(self):
         self.url = reverse_lazy('jobs:challenge_submission',
                                 kwargs={'challenge_id': self.challenge.pk,
@@ -375,7 +374,7 @@ class BaseAPITestClass(APITestCase):
         self.challenge.participant_teams.add(self.participant_team)
         self.challenge.is_docker_based = True
         self.challenge.save()
-
+        self.self.maxDiff = None
         response = self.client.post(self.url, {
                                         'status': 'submitting', 'input_file': self.input_file}, format="multipart")
         expected = {
