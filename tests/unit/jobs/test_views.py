@@ -910,8 +910,8 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
             'phases': [{
                 'name': self.challenge_phase.name,
                 'id': self.challenge_phase.id,
-                'start_date': self.challenge_phase.start_date,
-                'end_date': self.challenge_phase.end_date,
+                'start_date': "{0}{1}".format(self.challenge_phase.start_date.isoformat(), 'Z').replace("+00:00", ""),
+                'end_date': "{0}{1}".format(self.challenge_phase.end_date.isoformat(), 'Z').replace("+00:00", ""),
                 'message': {
                     'remaining_submissions_today_count': 12,
                     'remaining_submissions_this_month_count': 12,
