@@ -377,7 +377,7 @@ class BaseAPITestClass(APITestCase):
                                         'status': 'submitting', 'input_file': self.input_file}, format="multipart")
         expected = {
                 'error': '{0} requires uploading docker image. \
-                    Please use evalai-cli to make submissions.'.format(challenge.title)}
+                    Please use evalai-cli to make submissions.'.format(self.challenge.title)}
         self.assertEqual(response.status_code, status.HTTP_406_NOT_ACCEPTABLE)
         self.assertEqual(response.data, expected)
 
@@ -892,6 +892,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_all_phases_remaining(self):
+        self.maxDiff = None
         self.url = reverse_lazy('jobs:get_remaining_submissions_for_all_phases',
                                 kwargs={
                                     'challenge_pk': self.challenge.pk
