@@ -376,8 +376,8 @@ class BaseAPITestClass(APITestCase):
         response = self.client.post(self.url, {
                                         'status': 'submitting', 'input_file': self.input_file}, format="multipart")
         expected = {
-                'error': 'The challenge {0} requires code upload in the form of docker images. \
-                    Please use evalai-cli to make submissions.'.format(self.challenge.title)}
+                'error': '{0} requires uploading docker image. \
+                    Please use evalai-cli to make submissions.'.format(challenge.title)}
         self.assertEqual(response.status_code, status.HTTP_406_NOT_ACCEPTABLE)
         self.assertEqual(response.data, expected)
 
