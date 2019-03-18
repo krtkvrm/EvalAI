@@ -632,7 +632,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_submission_made_three_days_back(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         self.submission3.status = 'cancelled'
