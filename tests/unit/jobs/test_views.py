@@ -589,7 +589,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
                                     'challenge_phase_pk': self.challenge_phase.pk,
-                                    'challenge_pk': self.challenge.pk+1
                                 })
         expected = {
             'detail': 'Challenge {} does not exist'.format(self.challenge.pk+1)
@@ -773,7 +772,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.challenge.save()
         response = self.client.get(self.url, {})
         print(response.data['phases'][0]['message'])
-        self.assertEqual(response.data['phases'][0]['message'], expected['message'])
+        self.assertEqual(response.data['phases'][0]['message']['message'], expected['message'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_remaining_submissions_when_todays_is_greater_than_monthly_and_total(self):
