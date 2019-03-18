@@ -599,25 +599,9 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.assertEqual(response.data['phases'][0]['message'], expected)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_remaining_submission_when_challenge_phase_does_not_exist(self):
-        self.url = reverse_lazy('jobs:get_remaining_submissions',
-                                kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk + 2,
-                                    'challenge_pk': self.challenge.pk
-                                })
-
-        expected = {
-            'detail': 'ChallengePhase {} does not exist'.format(self.challenge_phase.pk + 2)
-        }
-
-        response = self.client.get(self.url, {})
-        self.assertEqual(response.data['phases'][0]['message'], expected)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
     def test_get_remaining_submission_when_participant_team_hasnt_participated_in_challenge(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
 
@@ -788,6 +772,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         self.challenge.participant_teams.add(self.participant_team)
         self.challenge.save()
         response = self.client.get(self.url, {})
+        print(response.data['phases'][0]['message'])
         self.assertEqual(response.data['phases'][0]['message'], expected['message'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
