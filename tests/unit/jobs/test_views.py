@@ -588,7 +588,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_challenge_does_not_exist(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_pk': self.challenge.pk
+                                    'challenge_pk': self.challenge.pk+1
                                 })
         expected = {
             'detail': 'Challenge {} does not exist'.format(self.challenge.pk+1)
