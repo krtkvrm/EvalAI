@@ -660,7 +660,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_submission_made_one_month_back(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         self.submission3.status = 'cancelled'
@@ -685,7 +684,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_submission_is_done(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         self.submission3.status = 'cancelled'
@@ -707,7 +705,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def get_remaining_submission_time_when_max_limit_is_exhausted(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions', 1)
@@ -731,7 +728,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def get_remaining_submission_time_when_monthly_limit_is_exhausted(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_month', 1)
@@ -754,7 +750,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def get_remaining_submission_time_when_both_monthly_and_daily_limit_is_exhausted(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_month', 1)
@@ -778,7 +773,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_time_when_daily_limit_is_exhausted(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 1)
@@ -801,7 +795,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submissions_when_todays_is_greater_than_monthly_and_total(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 20)
@@ -828,7 +821,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submissions_when_total_less_than_monthly(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 5)
@@ -855,7 +847,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_total_less_than_monthly_and_monthly_equal_daily(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 20)
@@ -882,7 +873,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submission_when_total_less_than_monthly_and_monthly_less_than_daily(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 30)
@@ -909,7 +899,6 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
     def test_get_remaining_submissions_when_monthly_remaining_less_than_todays(self):
         self.url = reverse_lazy('jobs:get_remaining_submissions',
                                 kwargs={
-                                    'challenge_phase_pk': self.challenge_phase.pk,
                                     'challenge_pk': self.challenge.pk
                                 })
         setattr(self.challenge_phase, 'max_submissions_per_day', 15)
