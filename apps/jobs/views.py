@@ -408,23 +408,7 @@ def leaderboard(request, challenge_phase_split_id):
 @throttle_classes([UserRateThrottle])
 @permission_classes((permissions.IsAuthenticated, HasVerifiedEmail))
 @authentication_classes((ExpiringTokenAuthentication,))
-def get_remaining_submissions(request, challenge_phase_pk, challenge_pk):
-    '''
-    Returns the number of remaining submissions that a participant can
-    do daily, monthly and in total to a particular challenge phase of a
-    challenge.
-    '''
-    response_data, response_status = get_remaining_submission_for_a_phase(request.user,
-                                                                          challenge_phase_pk,
-                                                                          challenge_pk)
-    return Response(response_data, status=response_status)
-
-
-@api_view(['GET'])
-@throttle_classes([UserRateThrottle])
-@permission_classes((permissions.IsAuthenticated, HasVerifiedEmail))
-@authentication_classes((ExpiringTokenAuthentication,))
-def get_remaining_submissions_for_all_phases(request, challenge_pk):
+def get_remaining_submissions(request, challenge_pk):
     '''
     API to get the number of remaining submission for all phases.
     Below is the sample response returned by the API
