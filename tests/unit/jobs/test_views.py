@@ -654,6 +654,8 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         }
 
         response = self.client.get(self.url, {})
+        print(response.data)
+        print(response.data.message)
         self.assertEqual(response.data['message'], expected)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
