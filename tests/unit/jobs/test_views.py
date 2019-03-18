@@ -595,7 +595,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         }
 
         response = self.client.get(self.url, {})
-        self.assertEqual(response.data['phases'][0]['message'], expected)
+        self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_remaining_submission_when_participant_team_hasnt_participated_in_challenge(self):
@@ -609,7 +609,7 @@ class GetRemainingSubmissionTest(BaseAPITestClass):
         }
 
         response = self.client.get(self.url, {})
-        self.assertEqual(response.data['phases'][0]['message'], expected)
+        self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_remaining_submission_when_submission_made_three_days_back(self):
