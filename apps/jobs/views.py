@@ -382,6 +382,7 @@ def leaderboard(request, challenge_phase_split_id):
     distinct_sorted_leaderboard_data = []
     team_list = []
     for data in sorted_leaderboard_data:
+        print(data)
         if data['submission__participant_team__team_name'] in team_list:
             continue
         elif data['submission__baseline_submission'] is True:
