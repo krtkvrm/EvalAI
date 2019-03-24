@@ -1436,7 +1436,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         expected = collections.OrderedDict(expected)
 
         response = self.client.get(self.url, {})
-
+        print(response.data)
         self.assertEqual(response.data['count'], expected['count'])
         self.assertEqual(response.data['next'], expected['next'])
         self.assertEqual(response.data['previous'], expected['previous'])
