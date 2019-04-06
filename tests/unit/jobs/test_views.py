@@ -1450,11 +1450,10 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
             ).replace("+00:00", ""),
             "is_baseline": self.submission.is_baseline,
         }
-        print(self.url)
         self.challenge.participant_teams.add(self.participant_team)
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.data, expected)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_toggle_baseline_when_user_is_not_a_host(
         self
@@ -1471,7 +1470,6 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         self.challenge.save()
         self.client.force_authenticate(user=self.user1)
         expected = {"error": "Sorry, you are not authorized to make this request"}
-        print(self.url)
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
