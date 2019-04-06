@@ -1516,7 +1516,7 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         }
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.data, expected)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_change_submission_data_and_visibility_when_submission_doesnt_exist(
         self
