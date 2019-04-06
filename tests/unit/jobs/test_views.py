@@ -1790,7 +1790,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             self.leaderboard.schema["default_order_by"]
         ]
 
-        self.filtering_score_host_participant_team_2 = self.result_json_host_participant_team[
+        self.filtering_score_host_participant_team_2 = self.result_json_host_participant_team_2[
             self.leaderboard.schema["default_order_by"]
         ]
 
