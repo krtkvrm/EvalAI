@@ -1881,20 +1881,6 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             "previous": None,
             "results": [
                 {
-                    "id": self.leaderboard_data.id,
-                    "submission__participant_team__team_name": self.submission.participant_team.team_name,
-                    "challenge_phase_split": self.challenge_phase_split.id,
-                    "result": self.expected_results,
-                    "filtering_score": self.filtering_score,
-                    "leaderboard__schema": {
-                        "default_order_by": "score",
-                        "labels": ["score", "test-score"],
-                    },
-                    "submission__submitted_at": self.submission.submitted_at,
-                    "submission__is_baseline": False,
-                    "submission__method_name": self.submission.method_name,
-                },
-                {
                     "id": self.host_participant_leaderboard_data.id,
                     "submission__participant_team__team_name":
                         self.host_participant_team_submission.participant_team.team_name,
@@ -1908,6 +1894,20 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "submission__submitted_at": self.host_participant_team_submission.submitted_at,
                     "submission__is_baseline": True,
                     "submission__method_name": self.host_participant_team_submission.method_name,
+                },
+                {
+                    "id": self.leaderboard_data.id,
+                    "submission__participant_team__team_name": self.submission.participant_team.team_name,
+                    "challenge_phase_split": self.challenge_phase_split.id,
+                    "result": self.expected_results,
+                    "filtering_score": self.filtering_score,
+                    "leaderboard__schema": {
+                        "default_order_by": "score",
+                        "labels": ["score", "test-score"],
+                    },
+                    "submission__submitted_at": self.submission.submitted_at,
+                    "submission__is_baseline": False,
+                    "submission__method_name": self.submission.method_name,
                 }
             ],
         }
@@ -1937,24 +1937,24 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         self.host_participant_team_submission_2.save()
 
         expected = {
-            "count": 2,
+            "count": 3,
             "next": None,
             "previous": None,
             "results": [
                 {
-                    "id": self.host_participant_leaderboard_data_2.id,
+                    "id": self.host_participant_leaderboard_data.id,
                     "submission__participant_team__team_name":
-                        self.host_participant_team_submission_2.participant_team.team_name,
+                        self.host_participant_team_submission.participant_team.team_name,
                     "challenge_phase_split": self.challenge_phase_split.id,
-                    "result": self.expected_results_host_participant_team_2,
-                    "filtering_score": self.filtering_score_host_participant_team_2,
+                    "result": self.expected_results_host_participant_team,
+                    "filtering_score": self.filtering_score_host_participant_team,
                     "leaderboard__schema": {
                         "default_order_by": "score",
                         "labels": ["score", "test-score"],
                     },
-                    "submission__submitted_at": self.host_participant_team_submission_2.submitted_at,
+                    "submission__submitted_at": self.host_participant_team_submission.submitted_at,
                     "submission__is_baseline": True,
-                    "submission__method_name": self.host_participant_team_submission_2.method_name,
+                    "submission__method_name": self.host_participant_team_submission.method_name,
                 },
                 {
                     "id": self.leaderboard_data.id,
@@ -1971,20 +1971,20 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "submission__method_name": self.submission.method_name,
                 },
                 {
-                    "id": self.host_participant_leaderboard_data.id,
+                    "id": self.host_participant_leaderboard_data_2.id,
                     "submission__participant_team__team_name":
-                        self.host_participant_team_submission.participant_team.team_name,
+                        self.host_participant_team_submission_2.participant_team.team_name,
                     "challenge_phase_split": self.challenge_phase_split.id,
-                    "result": self.expected_results_host_participant_team,
-                    "filtering_score": self.filtering_score_host_participant_team,
+                    "result": self.expected_results_host_participant_team_2,
+                    "filtering_score": self.filtering_score_host_participant_team_2,
                     "leaderboard__schema": {
                         "default_order_by": "score",
                         "labels": ["score", "test-score"],
                     },
-                    "submission__submitted_at": self.host_participant_team_submission.submitted_at,
+                    "submission__submitted_at": self.host_participant_team_submission_2.submitted_at,
                     "submission__is_baseline": True,
-                    "submission__method_name": self.host_participant_team_submission.method_name,
-                },
+                    "submission__method_name": self.host_participant_team_submission_2.method_name,
+                }
             ],
         }
         expected = collections.OrderedDict(expected)
