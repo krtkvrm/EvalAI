@@ -1487,7 +1487,7 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         )
         self.data = {"is_baseline": True}
         self.challenge.save()
-        self.client.force_authenticate(user=self.user1)
+        self.client.force_authenticate(user=self.user)
         expected = {"error": "Sorry, you are not authorized to make this request"}
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.data, expected)
