@@ -1711,6 +1711,20 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             publication_url="http://testserver/",
         )
 
+        self.host_participant_team_submission = Submission.objects.create(
+            participant_team=self.host_participant_team,
+            challenge_phase=self.challenge_phase,
+            created_by=self.challenge_host_team.created_by,
+            status="submitted",
+            input_file=self.challenge_phase.test_annotation,
+            method_name="Test Method",
+            method_description="Test Description",
+            project_url="http://testserver/",
+            publication_url="http://testserver/",
+            is_public=True,
+            when_made_public=timezone.now(),
+        )
+
         self.submission.is_public = True
         self.submission.status = Submission.FINISHED
         self.submission.save()
