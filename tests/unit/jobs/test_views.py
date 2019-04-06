@@ -1497,12 +1497,12 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
     def test_get_submission_by_pk_when_submission_doesnt_exist(self):
         self.url = reverse_lazy(
             "jobs:get_submission_by_pk",
-            kwargs={"submission_id": self.submission.id + 2},
+            kwargs={"submission_id": self.submission.id + 3},
         )
 
         expected = {
             "error": "Submission {} does not exist".format(
-                self.submission.id + 2
+                self.submission.id + 3
             )
         }
 
