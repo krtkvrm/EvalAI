@@ -1725,6 +1725,20 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             when_made_public=timezone.now(),
         )
 
+        self.host_participant_team_submission_2 = Submission.objects.create(
+            participant_team=self.host_participant_team,
+            challenge_phase=self.challenge_phase,
+            created_by=self.challenge_host_team.created_by,
+            status="submitted",
+            input_file=self.challenge_phase.test_annotation,
+            method_name="Test Method",
+            method_description="Test Description",
+            project_url="http://testserver/",
+            publication_url="http://testserver/",
+            is_public=True,
+            when_made_public=timezone.now(),
+        )
+
         self.submission.is_public = True
         self.submission.status = Submission.FINISHED
         self.submission.save()
@@ -1741,11 +1755,17 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         self.host_participant_team_submission.status = Submission.FINISHED
         self.host_participant_team_submission.save()
 
+        self.host_participant_team_submission_2.is_public = True
+        self.host_participant_team_submission_2.status = Submission.FINISHED
+        self.host_participant_team_submission_2.save()
+
         self.result_json = {"score": 50.0, "test-score": 75.0}
 
         self.result_json_2 = {"score": 10.0, "test-score": 20.0}
 
-        self.result_json_host_participant_team = {"score": 20.0, "test-score": 25.0}
+        self.result_json_host_participant_team = {"score": 52.0, "test-score": 80.0}
+
+        self.result_json_host_participant_team_2 = {"score": 20.0, "test-score": 60.0}
 
         self.expected_results = [
             self.result_json["score"],
@@ -1757,11 +1777,20 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             self.result_json_host_participant_team["test-score"],
         ]
 
+        self.expected_results_host_participant_team_2 = [
+            self.result_json_host_participant_team_2["score"],
+            self.result_json_host_participant_team_2["test-score"],
+        ]
+
         self.filtering_score = self.result_json[
             self.leaderboard.schema["default_order_by"]
         ]
 
         self.filtering_score_host_participant_team = self.result_json_host_participant_team[
+            self.leaderboard.schema["default_order_by"]
+        ]
+
+        self.filtering_score_host_participant_team_2 = self.result_json_host_participant_team[
             self.leaderboard.schema["default_order_by"]
         ]
 
@@ -1791,6 +1820,13 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             submission=self.host_participant_team_submission,
             leaderboard=self.leaderboard,
             result=self.result_json_host_participant_team,
+        )
+
+        self.host_participant_leaderboard_data_2 = LeaderboardData.objects.create(
+            challenge_phase_split=self.challenge_phase_split,
+            submission=self.host_participant_team_submission_2,
+            leaderboard=self.leaderboard,
+            result=self.result_json_host_participant_team_2,
         )
 
     def test_get_leaderboard(self):
@@ -1830,8 +1866,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         self.assertEqual(response.data["results"], expected["results"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_leaderboard_with_baseline_entries(self):
-        self.maxDiff = None
+    def test_get_leaderboard_with_baseline_entry(self):
         self.url = reverse_lazy(
             "jobs:leaderboard",
             kwargs={"challenge_phase_split_id": self.challenge_phase_split.id},
@@ -1845,6 +1880,96 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             "next": None,
             "previous": None,
             "results": [
+                {
+                    "id": self.leaderboard_data.id,
+                    "submission__participant_team__team_name": self.submission.participant_team.team_name,
+                    "challenge_phase_split": self.challenge_phase_split.id,
+                    "result": self.expected_results,
+                    "filtering_score": self.filtering_score,
+                    "leaderboard__schema": {
+                        "default_order_by": "score",
+                        "labels": ["score", "test-score"],
+                    },
+                    "submission__submitted_at": self.submission.submitted_at,
+                    "submission__is_baseline": False,
+                    "submission__method_name": self.submission.method_name,
+                },
+                {
+                    "id": self.host_participant_leaderboard_data.id,
+                    "submission__participant_team__team_name":
+                        self.host_participant_team_submission.participant_team.team_name,
+                    "challenge_phase_split": self.challenge_phase_split.id,
+                    "result": self.expected_results_host_participant_team,
+                    "filtering_score": self.filtering_score_host_participant_team,
+                    "leaderboard__schema": {
+                        "default_order_by": "score",
+                        "labels": ["score", "test-score"],
+                    },
+                    "submission__submitted_at": self.host_participant_team_submission.submitted_at,
+                    "submission__is_baseline": True,
+                    "submission__method_name": self.host_participant_team_submission.method_name,
+                }
+            ],
+        }
+        expected = collections.OrderedDict(expected)
+        response = self.client.get(self.url, {})
+
+        # Teardown
+        self.host_participant_team_submission.is_baseline = False
+        self.host_participant_team_submission.save()
+
+        self.assertEqual(response.data["count"], expected["count"])
+        self.assertEqual(response.data["next"], expected["next"])
+        self.assertEqual(response.data["previous"], expected["previous"])
+        self.assertEqual(response.data["results"], expected["results"])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_leaderboard_with_multiple_baseline_entries(self):
+        self.url = reverse_lazy(
+            "jobs:leaderboard",
+            kwargs={"challenge_phase_split_id": self.challenge_phase_split.id},
+        )
+
+        self.host_participant_team_submission.is_baseline = True
+        self.host_participant_team_submission.save()
+
+        self.host_participant_team_submission_2.is_baseline = True
+        self.host_participant_team_submission_2.save()
+
+        expected = {
+            "count": 2,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "id": self.host_participant_leaderboard_data_2.id,
+                    "submission__participant_team__team_name":
+                        self.host_participant_team_submission_2.participant_team.team_name,
+                    "challenge_phase_split": self.challenge_phase_split.id,
+                    "result": self.expected_results_host_participant_team_2,
+                    "filtering_score": self.filtering_score_host_participant_team_2,
+                    "leaderboard__schema": {
+                        "default_order_by": "score",
+                        "labels": ["score", "test-score"],
+                    },
+                    "submission__submitted_at": self.host_participant_team_submission_2.submitted_at,
+                    "submission__is_baseline": True,
+                    "submission__method_name": self.host_participant_team_submission_2.method_name,
+                },
+                {
+                    "id": self.leaderboard_data.id,
+                    "submission__participant_team__team_name": self.submission.participant_team.team_name,
+                    "challenge_phase_split": self.challenge_phase_split.id,
+                    "result": self.expected_results,
+                    "filtering_score": self.filtering_score,
+                    "leaderboard__schema": {
+                        "default_order_by": "score",
+                        "labels": ["score", "test-score"],
+                    },
+                    "submission__submitted_at": self.submission.submitted_at,
+                    "submission__is_baseline": False,
+                    "submission__method_name": self.submission.method_name,
+                },
                 {
                     "id": self.host_participant_leaderboard_data.id,
                     "submission__participant_team__team_name":
@@ -1860,28 +1985,17 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "submission__is_baseline": True,
                     "submission__method_name": self.host_participant_team_submission.method_name,
                 },
-                {
-                    "id": self.leaderboard_data.id,
-                    "submission__participant_team__team_name": self.submission.participant_team.team_name,
-                    "challenge_phase_split": self.challenge_phase_split.id,
-                    "result": self.expected_results,
-                    "filtering_score": self.filtering_score,
-                    "leaderboard__schema": {
-                        "default_order_by": "score",
-                        "labels": ["score", "test-score"],
-                    },
-                    "submission__submitted_at": self.submission.submitted_at,
-                    "submission__is_baseline": False,
-                    "submission__method_name": self.submission.method_name,
-                }
             ],
         }
         expected = collections.OrderedDict(expected)
         response = self.client.get(self.url, {})
+
+        # Teardown
         self.host_participant_team_submission.is_baseline = False
         self.host_participant_team_submission.save()
-        print(expected)
-        print(response.data)
+        self.host_participant_team_submission_2.is_baseline = False
+        self.host_participant_team_submission_2.save()
+
         self.assertEqual(response.data["count"], expected["count"])
         self.assertEqual(response.data["next"], expected["next"])
         self.assertEqual(response.data["previous"], expected["previous"])
