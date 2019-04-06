@@ -1989,7 +1989,8 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         }
         expected = collections.OrderedDict(expected)
         response = self.client.get(self.url, {})
-
+        print(expected)
+        print(response.data)
         # Teardown
         self.host_participant_team_submission.is_baseline = False
         self.host_participant_team_submission.save()
