@@ -1488,7 +1488,32 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
         self.data = {"is_baseline": True}
         self.challenge.save()
         self.client.force_authenticate(user=self.user)
-        expected = {"error": "Sorry, you are not authorized to make this request"}
+        expected = {
+            "id": self.host_participant_team_submission.id,
+            "participant_team": self.host_participant_team_submission.participant_team.pk,
+            "participant_team_name": self.host_participant_team_submission.participant_team.team_name,
+            "execution_time": self.host_participant_team_submission.execution_time,
+            "challenge_phase": self.host_participant_team_submission.challenge_phase.pk,
+            "created_by": self.host_participant_team_submission.created_by.pk,
+            "status": self.host_participant_team_submission.status,
+            "input_file": "http://testserver%s"
+            % (self.host_participant_team_submission.input_file.url),
+            "method_name": self.host_participant_team_submission.method_name,
+            "method_description": self.host_participant_team_submission.method_description,
+            "project_url": self.host_participant_team_submission.project_url,
+            "publication_url": self.host_participant_team_submission.publication_url,
+            "stdout_file": None,
+            "stderr_file": None,
+            "submission_result_file": None,
+            "submitted_at": "{0}{1}".format(
+                self.host_participant_team_submission.submitted_at.isoformat(), "Z"
+            ).replace("+00:00", ""),
+            "is_public": self.host_participant_team_submission.is_public,
+            "when_made_public": "{0}{1}".format(
+                self.host_participant_team_submission.when_made_public.isoformat(), "Z"
+            ).replace("+00:00", ""),
+            "is_baseline": True,
+        }
         response = self.client.patch(self.url, self.data)
         self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -1516,12 +1541,12 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
     def test_get_submission_by_pk_when_submission_doesnt_exist(self):
         self.url = reverse_lazy(
             "jobs:get_submission_by_pk",
-            kwargs={"submission_id": self.submission.id + 2},
+            kwargs={"submission_id": self.submission.id + 3},
         )
 
         expected = {
             "error": "Submission {} does not exist".format(
-                self.submission.id + 2
+                self.submission.id + 3
             )
         }
 
