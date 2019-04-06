@@ -1877,10 +1877,11 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             ],
         }
         expected = collections.OrderedDict(expected)
-
         response = self.client.get(self.url, {})
         self.host_participant_team_submission.is_baseline = False
         self.host_participant_team_submission.save()
+        print(expected)
+        print(response.data)
         self.assertEqual(response.data["count"], expected["count"])
         self.assertEqual(response.data["next"], expected["next"])
         self.assertEqual(response.data["previous"], expected["previous"])
