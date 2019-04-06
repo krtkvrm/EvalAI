@@ -1156,6 +1156,20 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
             when_made_public=timezone.now(),
         )
 
+        self.host_participant_team_submission = Submission.objects.create(
+            participant_team=self.host_participant_team,
+            challenge_phase=self.challenge_phase,
+            created_by=self.challenge_host_team.created_by,
+            status="submitted",
+            input_file=self.challenge_phase.test_annotation,
+            method_name="Test Method",
+            method_description="Test Description",
+            project_url="http://testserver/",
+            publication_url="http://testserver/",
+            is_public=True,
+            when_made_public=timezone.now(),
+        )
+
         self.url = reverse_lazy(
             "jobs:change_submission_data_and_visibility",
             kwargs={
@@ -1450,6 +1464,25 @@ class ChangeSubmissionDataAndVisibilityTest(BaseAPITestClass):
                 "challenge_pk": self.challenge.pk,
                 "challenge_phase_pk": self.challenge_phase.pk,
                 "submission_pk": self.submission.pk,
+            },
+        )
+        self.data = {"is_baseline": True}
+        self.challenge.save()
+        self.client.force_authenticate(user=self.user1)
+        expected = {"error": "Sorry, you are not authorized to make this request"}
+        response = self.client.patch(self.url, self.data)
+        self.assertEqual(response.data, expected)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_toggle_baseline_when_user_is_host(
+        self
+    ):
+        self.url = reverse_lazy(
+            "jobs:change_submission_data_and_visibility",
+            kwargs={
+                "challenge_pk": self.challenge.pk,
+                "challenge_phase_pk": self.challenge_phase.pk,
+                "submission_pk": self.host_participant_team_submission.pk,
             },
         )
         self.data = {"is_baseline": True}
