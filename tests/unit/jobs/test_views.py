@@ -1831,6 +1831,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_leaderboard_with_baseline_entries(self):
+        self.maxDiff = None
         self.url = reverse_lazy(
             "jobs:leaderboard",
             kwargs={"challenge_phase_split_id": self.challenge_phase_split.id},
