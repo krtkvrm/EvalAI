@@ -1,3 +1,4 @@
+import csv
 from datetime import timedelta
 from base.utils import (
     paginated_queryset,
@@ -6,6 +7,7 @@ from base.utils import (
     get_queue_name,
 )
 from django.utils import timezone
+from django.http import HttpResponse
 
 from rest_framework import permissions, status
 from rest_framework.decorators import (
@@ -63,17 +65,7 @@ def get_participant_team_count(request, challenge_pk):
     challenge = get_challenge_model(challenge_pk)
     participant_team = challenge.participant_teams.all().order_by("-team_name")
     paginator, result_page = paginated_queryset(participant_team, request)
-    # print(result_page)
-    # print(participant_team)
     part = ChallengeParticipantSerializer(result_page, many=True, context={"request": request})
-    # for i in participant_team:
-    #     part = ChallengeParticipantSerializer(i, context={"request": request})
-    #     print(part.data)
-    # print(part.data)
-    # participant_team_count = challenge.participant_teams.count()
-    # participant_team_count = ParticipantTeamCount(participant_team_count)
-    # serializer = ParticipantTeamCountSerializer(participant_team_count)
-    # return Response(serializer.data, status=status.HTTP_200_OK)
     response = HttpResponse(content_type="text/csv")
     response[
         "Content-Disposition"
@@ -81,39 +73,24 @@ def get_participant_team_count(request, challenge_pk):
     writer = csv.writer(response)
     writer.writerow(
         [
-            "id",
+            "Participant Team",
+            "Team Members",
+            "Team Members Email ID",
         ]
     )
-    # print(submissions.data)
-    # for submission in part.data:
-    #     writer.writerow(
-    #         [
-    #                     submission["id"],
-    #                     submission["participant_team"],
-    #                     ",".join(
-    #                         username["username"]
-    #                         for username in submission[
-    #                             "participant_team_members"
-    #                         ]
-    #                     ),
-    #                     ",".join(
-    #                         email["email"]
-    #                         for email in submission["participant_team_members"]
-    #                     ),
-    #                     submission["challenge_phase"],
-    #                     submission["status"],
-    #                     submission["created_by"],
-    #                     submission["execution_time"],
-    #                     submission["submission_number"],
-    #                     submission["input_file"],
-    #                     submission["stdout_file"],
-    #                     submission["stderr_file"],
-    #                     submission["created_at"],
-    #                     submission["submission_result_file"],
-    #                     submission["submission_metadata_file"],
-    #                 ]
-    #             )
-    #         return response
+    for submission in part.data:
+        writer.writerow(
+            [
+                submission["team_name"],
+                ",".join(
+                    submission["team_members"]
+                ),
+                ",".join(
+                    submission["team_members_email_ids"]
+                ),
+            ]
+        )
+    return response
 
 
 
