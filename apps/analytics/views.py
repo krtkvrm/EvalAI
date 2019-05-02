@@ -1,5 +1,10 @@
 from datetime import timedelta
-
+from base.utils import (
+    paginated_queryset,
+    send_email,
+    get_url_from_hostname,
+    get_queue_name,
+)
 from django.utils import timezone
 
 from rest_framework import permissions, status
@@ -41,6 +46,7 @@ from .serializers import (
     ChallengePhaseSubmissionCountSerializer,
     LastSubmissionTimestamp,
     LastSubmissionTimestampSerializer,
+    ChallengeParticipantSerializer,
 )
 
 
@@ -55,10 +61,60 @@ def get_participant_team_count(request, challenge_pk):
         Returns the number of participant teams in a challenge
     """
     challenge = get_challenge_model(challenge_pk)
-    participant_team_count = challenge.participant_teams.count()
-    participant_team_count = ParticipantTeamCount(participant_team_count)
-    serializer = ParticipantTeamCountSerializer(participant_team_count)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    participant_team = challenge.participant_teams.all().order_by("-team_name")
+    paginator, result_page = paginated_queryset(participant_team, request)
+    # print(result_page)
+    # print(participant_team)
+    part = ChallengeParticipantSerializer(result_page, many=True, context={"request": request})
+    # for i in participant_team:
+    #     part = ChallengeParticipantSerializer(i, context={"request": request})
+    #     print(part.data)
+    # print(part.data)
+    # participant_team_count = challenge.participant_teams.count()
+    # participant_team_count = ParticipantTeamCount(participant_team_count)
+    # serializer = ParticipantTeamCountSerializer(participant_team_count)
+    # return Response(serializer.data, status=status.HTTP_200_OK)
+    response = HttpResponse(content_type="text/csv")
+    response[
+        "Content-Disposition"
+    ] = "attachment; filename=all_submissions.csv"
+    writer = csv.writer(response)
+    writer.writerow(
+        [
+            "id",
+        ]
+    )
+    # print(submissions.data)
+    # for submission in part.data:
+    #     writer.writerow(
+    #         [
+    #                     submission["id"],
+    #                     submission["participant_team"],
+    #                     ",".join(
+    #                         username["username"]
+    #                         for username in submission[
+    #                             "participant_team_members"
+    #                         ]
+    #                     ),
+    #                     ",".join(
+    #                         email["email"]
+    #                         for email in submission["participant_team_members"]
+    #                     ),
+    #                     submission["challenge_phase"],
+    #                     submission["status"],
+    #                     submission["created_by"],
+    #                     submission["execution_time"],
+    #                     submission["submission_number"],
+    #                     submission["input_file"],
+    #                     submission["stdout_file"],
+    #                     submission["stderr_file"],
+    #                     submission["created_at"],
+    #                     submission["submission_result_file"],
+    #                     submission["submission_metadata_file"],
+    #                 ]
+    #             )
+    #         return response
+
 
 
 @api_view(["GET"])
@@ -317,3 +373,29 @@ def get_challenge_phase_submission_analysis(
     except ValueError:
         response_data = {"error": "Bad request. Please try again later!"}
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["GET"])
+@throttle_classes([UserRateThrottle])
+@permission_classes(
+    (permissions.IsAuthenticated, HasVerifiedEmail, IsChallengeCreator)
+)
+@authentication_classes((ExpiringTokenAuthentication,))
+def download_all_participants(request, challenge_pk):
+    """
+        Returns the number of participant teams in a challenge
+    """
+    challenge = get_challenge_model(challenge_pk)
+    participant_team = challenge.participant_teams.all().order_by("-team_name")
+    paginator, result_page = paginated_queryset(participant_team, request)
+    # print(result_page)
+    # print(participant_team)
+    part = ChallengeParticipantSerializer(result_page, many=True, context={"request": request})
+    # for i in participant_team:
+    #     part = ChallengeParticipantSerializer(i, context={"request": request})
+    #     print(part.data)
+    print(part.data)
+    participant_team_count = challenge.participant_teams.count()
+    participant_team_count = ParticipantTeamCount(participant_team_count)
+    serializer = ParticipantTeamCountSerializer(participant_team_count)
+    return Response(serializer.data, status=status.HTTP_200_OK)
