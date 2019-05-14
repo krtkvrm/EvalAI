@@ -1875,7 +1875,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             "jobs:leaderboard",
             kwargs={"challenge_phase_split_id": self.challenge_phase_split.id},
         )
-
+        self.maxDiff = None
         self.host_participant_team_submission.is_baseline = True
         self.host_participant_team_submission.save()
 
@@ -1935,7 +1935,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
             "jobs:leaderboard",
             kwargs={"challenge_phase_split_id": self.challenge_phase_split.id},
         )
-
+        self.maxDiff = None
         self.host_participant_team_submission.is_baseline = True
         self.host_participant_team_submission.save()
 
