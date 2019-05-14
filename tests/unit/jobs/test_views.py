@@ -1927,8 +1927,6 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         # Teardown
         self.host_participant_team_submission.is_baseline = False
         self.host_participant_team_submission.save()
-        print(response.data)
-        print(expected)
 
         self.assertEqual(response.data["count"], expected["count"])
         self.assertEqual(response.data["next"], expected["next"])
