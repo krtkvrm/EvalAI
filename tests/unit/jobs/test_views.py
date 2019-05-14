@@ -1902,6 +1902,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                 {
                     "id": self.leaderboard_data.id,
                     "submission__participant_team__team_name": self.submission.participant_team.team_name,
+                    "submission__participant_team__team_url": self.submission.participant_team.team_url,
                     "challenge_phase_split": self.challenge_phase_split.id,
                     "result": self.expected_results,
                     "filtering_score": self.filtering_score,
@@ -1963,6 +1964,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                 {
                     "id": self.leaderboard_data.id,
                     "submission__participant_team__team_name": self.submission.participant_team.team_name,
+                    "submission__participant_team__team_url": self.submission.participant_team.team_url,
                     "challenge_phase_split": self.challenge_phase_split.id,
                     "result": self.expected_results,
                     "filtering_score": self.filtering_score,
@@ -1993,8 +1995,6 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
         }
         expected = collections.OrderedDict(expected)
         response = self.client.get(self.url, {})
-        print(expected)
-        print(response.data)
         # Teardown
         self.host_participant_team_submission.is_baseline = False
         self.host_participant_team_submission.save()
