@@ -1888,6 +1888,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "id": self.host_participant_leaderboard_data.id,
                     "submission__participant_team__team_name":
                         self.host_participant_team_submission.participant_team.team_name,
+                    "submission__participant_team__team_url": self.host_participant_team_submission.participant_team.team_url,
                     "challenge_phase_split": self.challenge_phase_split.id,
                     "result": self.expected_results_host_participant_team,
                     "filtering_score": self.filtering_score_host_participant_team,
@@ -1950,6 +1951,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "id": self.host_participant_leaderboard_data.id,
                     "submission__participant_team__team_name":
                         self.host_participant_team_submission.participant_team.team_name,
+                        "submission__participant_team__team_url": self.host_participant_team_submission.participant_team.team_url,
                     "challenge_phase_split": self.challenge_phase_split.id,
                     "result": self.expected_results_host_participant_team,
                     "filtering_score": self.filtering_score_host_participant_team,
@@ -1980,6 +1982,7 @@ class ChallengeLeaderboardTest(BaseAPITestClass):
                     "id": self.host_participant_leaderboard_data_2.id,
                     "submission__participant_team__team_name":
                         self.host_participant_team_submission_2.participant_team.team_name,
+                    "submission__participant_team__team_url": self.host_participant_team_submission_2.participant_team.team_url,
                     "challenge_phase_split": self.challenge_phase_split.id,
                     "result": self.expected_results_host_participant_team_2,
                     "filtering_score": self.filtering_score_host_participant_team_2,
