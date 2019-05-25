@@ -780,7 +780,7 @@ def update_submission(request, challenge_pk):
             "error": "Sorry, you are not authorized to make this request!"
         }
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-
+    print(request.data)
     if request.method == "PUT":
         # print("KJBAS")
         challenge_phase_pk = request.data.get("challenge_phase")
