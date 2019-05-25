@@ -782,6 +782,7 @@ def update_submission(request, challenge_pk):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "PUT":
+        # print("KJBAS")
         challenge_phase_pk = request.data.get("challenge_phase")
         submission_pk = request.data.get("submission")
         submission_status = request.data.get("submission_status", "").lower()
@@ -802,9 +803,10 @@ def update_submission(request, challenge_pk):
         ]:
             response_data = {"error": "Sorry, submission status is invalid"}
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
-
+        print("ABC")
         if successful_submission:
             try:
+                print(submission_result)
                 results = json.loads(submission_result)
             except (ValueError, TypeError) as exc:
                 response_data = {
