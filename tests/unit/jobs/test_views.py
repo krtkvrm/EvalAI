@@ -1972,7 +1972,7 @@ class UpdateSubmissionTest(BaseAPITestClass):
         expected = {
             "success": "Submission result has been successfully updated"
         }
-        print(self.data)
+        print(json.dumps(self.data))
         self.client.force_authenticate(user=self.challenge_host.user)
         response = self.client.put(self.url, self.data)
         self.assertEqual(response.data, expected)
