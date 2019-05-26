@@ -2030,7 +2030,7 @@ class UpdateSubmissionTest(BaseAPITestClass):
             ),
         }
         expected = {
-            "error": "Following metrics are missing in theleaderboard data: ['error_Metric0']"
+            "error": "Following metrics are missing in theleaderboard data: ['error_metric0']"
         }
         self.client.force_authenticate(user=self.challenge_host.user)
         response = self.client.put(self.url, self.data)
@@ -2060,7 +2060,7 @@ class UpdateSubmissionTest(BaseAPITestClass):
             ),
         }
         expected = {
-            "error": "Values for following metrics are not offloat/int: [('error_Metric2', <class 'str'>)]"
+            "error": "Values for following metrics are not offloat/int: [('error_metric2', <class 'str'>)]"
         }
         self.client.force_authenticate(user=self.challenge_host.user)
         response = self.client.put(self.url, self.data)
