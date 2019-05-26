@@ -1972,12 +1972,10 @@ class UpdateSubmissionTest(BaseAPITestClass):
         expected = {
             "success": "Submission result has been successfully updated"
         }
-        print(json.dumps(self.data))
         self.client.force_authenticate(user=self.challenge_host.user)
         response = self.client.put(self.url, self.data)
         self.assertEqual(response.data, expected)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_submission_for_invalid_data_in_result_key(self):
         self.url = reverse_lazy(
