@@ -3729,3 +3729,27 @@ class StarChallengesTest(BaseAPITestClass):
         response = self.client.post(self.url, {})
         self.assertEqual(response.data, expected)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetAWSCredentialsForParticipantTeamTest(BaseChallengePhaseClass):
+    def setUp(self):
+        super(GetAWSCredentialsForParticipantTeamTest, self).setUp()
+        self.url = reverse_lazy(
+            "challenges:star_challenge",
+            kwargs={"challenge_pk": self.challenge.pk},
+        )
+
+    def test_get_aws_credentials_when_challenge_is_not_docker_based(self):
+        self.challenge.is_docker_based = False
+        self.challenge.save()
+
+        self.url = reverse_lazy(
+            "challenges:get_aws_credentials_for_participant_team",
+            kwargs={"phase_pk": self.challenge_phase.pk},
+        )
+        expected = {
+            "error": "Sorry, this is not a docker based challenge."
+        }
+        response = self.client.get(self.url, {})
+        self.assertEqual(response.data, expected)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
