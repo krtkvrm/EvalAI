@@ -252,6 +252,7 @@ def challenge_submission(request, challenge_id, challenge_phase_id):
                     file_content = json.loads(
                         request.FILES['input_file'].read()
                     )
+                    print(file_content)
                     message["submitted_image_uri"] = file_content["submitted_image_uri"]
                 except:
                     response_data = {
