@@ -249,13 +249,13 @@ def challenge_submission(request, challenge_id, challenge_phase_id):
             # publish message in the queue
             if challenge.is_docker_based:
                 try:
-                    file_content = json.loads(
-                        request.FILES['input_file'].read()
-                    )
+                    file_content = request.FILES['input_file'].read()
+                    file_content = json.loads(file_content)
                     message["submitted_image_uri"] = file_content["submitted_image_uri"]
                 except Exception as e:
                     response_data = {
-                        "error": str(e)
+                        "error": str(e),
+                        "file": file_content
                     }
                     return Response(
                         response_data, status=status.HTTP_406_NOT_ACCEPTABLE
