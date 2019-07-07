@@ -254,9 +254,9 @@ def challenge_submission(request, challenge_id, challenge_phase_id):
                     )
                     print(file_content)
                     message["submitted_image_uri"] = file_content["submitted_image_uri"]
-                except:
+                except Exception as e:
                     response_data = {
-                        "error": "Error in deserializing submitted_image_uri from submission file"
+                        "error": str(e)
                     }
                     return Response(
                         response_data, status=status.HTTP_406_NOT_ACCEPTABLE
