@@ -555,6 +555,7 @@ class BaseAPITestClass(APITestCase):
             format="multipart",
         )
         print(response.data)
+        print(self.rl_submission_file)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
