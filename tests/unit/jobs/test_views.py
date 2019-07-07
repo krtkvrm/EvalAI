@@ -172,7 +172,7 @@ class BaseAPITestClass(APITestCase):
         )
 
         self.rl_submission_file = SimpleUploadedFile(
-            "dummy_input.txt",
+            "submission.json",
             json.dumps({"submitted_image_uri": "github.com"}).encode("utf-8"),
             content_type="text/plain",
         )
