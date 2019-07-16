@@ -37,8 +37,13 @@ class EvalAI_Interface:
     def make_request(self, url, method, data=None):
         headers = self.get_request_headers()
         try:
-            response = requests.request(method=method, url=url, headers=headers)
-            response.raise_for_status()
+            response = requests.request(
+                method=method,
+                url=url,
+                headers=headers,
+                data=data
+            )
+            # response.raise_for_status()
         except requests.exceptions.RequestException:
             logger.info(
                 "The worker is not able to establish connection with EvalAI"
@@ -98,7 +103,9 @@ class EvalAI_Interface:
         return response
 
     def update_submission_status(self, data, challenge_pk):
-        url = "/api/jobs/challenge/{}/update_submission/".format(challenge_pk)
+        url = URLS.get("update_submission_data").format(challenge_pk)
         url = self.return_url_per_environment(url)
+        print("ABC")
         response = self.make_request(url, "PATCH", data=data)
+        print("XYZ")
         return response
