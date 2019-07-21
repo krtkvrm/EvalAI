@@ -41,7 +41,8 @@ class EvalAI_Interface:
                 method=method,
                 url=url,
                 headers=headers,
-                data=data
+                data=data,
+                timeout=200
             )
             # response.raise_for_status()
         except requests.exceptions.RequestException:
@@ -49,10 +50,11 @@ class EvalAI_Interface:
                 "The worker is not able to establish connection with EvalAI"
             )
             raise
+        print(response.text)
         return response.json()
 
     def return_url_per_environment(self, url):
-        base_url = "http://{0}:{1}".format(self.DJANGO_SERVER, self.DJANGO_SERVER_PORT)
+        base_url = "{0}:{1}".format(self.DJANGO_SERVER, self.DJANGO_SERVER_PORT)
         url = "{0}{1}".format(base_url, url)
         return url
 
@@ -63,12 +65,15 @@ class EvalAI_Interface:
         return response
 
     def delete_message_from_sqs_queue(self, receipt_handle):
+        print(receipt_handle)
         url = URLS.get("delete_message_from_sqs_queue").format(
-            self.QUEUE_NAME, receipt_handle
+            self.QUEUE_NAME, "A"
         )
         url = self.return_url_per_environment(url)
-        response = self.make_request(url, "GET")  # noqa
-        return
+        response = self.make_request(url, "POST", data={
+            "receipt_handle": receipt_handle
+        })  # noqa
+        return response
 
     def get_submission_by_pk(self, submission_pk):
         url = URLS.get("get_submission_by_pk").format(submission_pk)
