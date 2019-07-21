@@ -1691,39 +1691,39 @@ def get_aws_credentials_for_participant_team(request, phase_pk):
     Returns:
         Dictionary containing AWS credentials for the participant team for a particular challenge
     """
-    aws_credentials = """
-{
-    "success": {
-        "federated_user": {
-            "Credentials": {
-                "AccessKeyId": "ABCDEFGHIJKLMNOPQRTUVWXYZ",
-                "SecretAccessKey": "NMgBB75gfVBCDEFGHIJK8g00qVyyzQW+4XjJGQALMNOPQRSTUV",
-                "SessionToken": "FQoGZX.....",
-                "Expiration": "7845124587452165"
-            },
-            "FederatedUser": {
-                "FederatedUserId": "1234567890:test-user",
-                "Arn": "arn:aws:sts::1234567890:federated-user/test-user"
-            },
-            "PackedPolicySize": 28,
-            "ResponseMetadata": {
-                "RequestId": "fb47f78b-2a92-11e9-84b9-33527429b818",
-                "HTTPStatusCode": 200,
-                "HTTPHeaders": {
-                    "x-amzn-requestid": "fb47f78b-2a92-11e9-84b9-33527429b818",
-                    "content-type": "text/xml",
-                    "content-length": "1245",
-                    "date": "Thu, 07 Feb 2019 04:43:57 GMT"
-                },
-                "RetryAttempts": 0
-            }
-        },
-        "docker_repository_uri": "aws_account_id.dkr.ecr.us-east-1.amazonaws.com/evalai-test-repository2"
-    }
-}
-"""
-    # response_data = {"success": data}
-    return Response(json.loads(aws_credentials), status=status.HTTP_200_OK)
+#     aws_credentials = """
+# {
+#     "success": {
+#         "federated_user": {
+#             "Credentials": {
+#                 "AccessKeyId": "ABCDEFGHIJKLMNOPQRTUVWXYZ",
+#                 "SecretAccessKey": "NMgBB75gfVBCDEFGHIJK8g00qVyyzQW+4XjJGQALMNOPQRSTUV",
+#                 "SessionToken": "FQoGZX.....",
+#                 "Expiration": "7845124587452165"
+#             },
+#             "FederatedUser": {
+#                 "FederatedUserId": "1234567890:test-user",
+#                 "Arn": "arn:aws:sts::1234567890:federated-user/test-user"
+#             },
+#             "PackedPolicySize": 28,
+#             "ResponseMetadata": {
+#                 "RequestId": "fb47f78b-2a92-11e9-84b9-33527429b818",
+#                 "HTTPStatusCode": 200,
+#                 "HTTPHeaders": {
+#                     "x-amzn-requestid": "fb47f78b-2a92-11e9-84b9-33527429b818",
+#                     "content-type": "text/xml",
+#                     "content-length": "1245",
+#                     "date": "Thu, 07 Feb 2019 04:43:57 GMT"
+#                 },
+#                 "RetryAttempts": 0
+#             }
+#         },
+#         "docker_repository_uri": "aws_account_id.dkr.ecr.us-east-1.amazonaws.com/evalai-test-repository2"
+#     }
+# }
+# """
+#     # response_data = {"success": data}
+#     return Response(json.loads(aws_credentials), status=status.HTTP_200_OK)
     #
     #
     #

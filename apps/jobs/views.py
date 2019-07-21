@@ -941,11 +941,15 @@ def update_submission(request, challenge_pk):
             response_data = {"error": "Sorry, submission status is invalid"}
             return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
         data = {"status": submission_status, "started_at": timezone.now()}
+        print(data)
         serializer = SubmissionSerializer(
             submission, data=data, partial=True, context={"request": request}
         )
         if serializer.is_valid():
-            submission.save()
+            serializer.save()
+            print(serializer.data)
+            s = get_submission_model(submission_pk)
+            print(s)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1018,7 +1022,7 @@ def get_submission_message_from_queue(request, queue_name):
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
-    queue = get_sqs_queue_object()
+    queue = get_sqs_queue_object(queue_name)
     try:
         messages = queue.receive_messages()
         if len(messages):
@@ -1045,7 +1049,7 @@ def get_submission_message_from_queue(request, queue_name):
         return Response(response_data, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 @throttle_classes([UserRateThrottle])
 @permission_classes((permissions.IsAuthenticated, HasVerifiedEmail))
 @authentication_classes((ExpiringTokenAuthentication,))
@@ -1056,6 +1060,8 @@ def delete_submission_message_from_queue(request, queue_name, receipt_handle):
         queue_name  -- The unique authentication token provided by challenge hosts
         receipt_handle -- The receipt handle of the message to be deleted
     """
+    receipt_handle = request.data["receipt_handle"]
+    print(receipt_handle)
     try:
         challenge = Challenge.objects.get(queue=queue_name)
     except Challenge.DoesNotExist:
@@ -1073,7 +1079,7 @@ def delete_submission_message_from_queue(request, queue_name, receipt_handle):
         }
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
-    queue = get_sqs_queue_object()
+    queue = get_sqs_queue_object(queue_name)
     try:
         message = queue.Message(receipt_handle)
         message.delete()

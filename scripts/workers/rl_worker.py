@@ -31,10 +31,10 @@ class GracefulKiller:
 
 logger = logging.getLogger(__name__)
 
-AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "x")
+AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
 DJANGO_SERVER = os.environ.get("DJANGO_SERVER", "localhost")
 DJANGO_SERVER_PORT = os.environ.get("DJANGO_SERVER_PORT", "8000")
-QUEUE_NAME = os.environ.get("QUEUE_NAME", "qWVdKnpEDHAKlrJNhxbOAdaUtLGHyUizJtRVONjMXMlYKSczhQKnBmUXCdPjrpAJoGTWAeVWVQv")
+QUEUE_NAME = os.environ.get("QUEUE_NAME", "random-number-generator-challenge-220302f3-e640-45b8-855d-ac73d5f6ba14")
 
 DEPLOYED_SUBMISSIONS = set()
 
@@ -111,6 +111,8 @@ def main():
         )
         
         message = api.get_message_from_sqs_queue()
+        print("YES")
+        print(message)
         message_body = message.get("body")
         if message_body:
             submission_pk = message_body.get("submission_pk")
@@ -126,9 +128,10 @@ def main():
                     logger.info(
                         "Processing message body: {}".format(message_body)
                     )
-                    process_submission_callback(message_body, api)
+                    print(message_body)
+                    # process_submission_callback(message_body, api)
                     # Let the queue know that the message is processed
-                    api.delete_message_from_sqs_queue(message_receipt_handle)
+                    # api.delete_message_from_sqs_queue(message_receipt_handle)
         time.sleep(5)
         if killer.kill_now:
             break

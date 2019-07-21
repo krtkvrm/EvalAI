@@ -152,9 +152,8 @@ def get_boto3_client(resource, aws_keys):
         logger.exception(e)
 
 
-def get_sqs_queue_object():
+def get_sqs_queue_object(queue_name="evalai_submission_queue"):
     if settings.DEBUG or settings.TEST:
-        queue_name = "evalai_submission_queue"
         sqs = boto3.resource(
             "sqs",
             endpoint_url=os.environ.get("AWS_SQS_ENDPOINT", "http://sqs:9324"),
