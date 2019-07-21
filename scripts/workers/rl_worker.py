@@ -1,9 +1,9 @@
-import kubernetes
+# import kubernetes
 import logging
 import os
 import time
 import signal
-import uuid
+# import uuid
 from .worker_util import (
     EvalAI_Interface
 )
@@ -13,10 +13,12 @@ import string
 
 from kubernetes import client, config
 
+
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
+
 
 class GracefulKiller:
     kill_now = False
@@ -33,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
 ENVIRONMENT_IMAGE = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
-DJANGO_SERVER = os.environ.get("DJANGO_SERVER", "https://tender-yak-89.localtunnel.me")
+DJANGO_SERVER = os.environ.get("DJANGO_SERVER", "https://hard-treefrog-35.localtunnel.me")
 DJANGO_SERVER_PORT = os.environ.get("DJANGO_SERVER_PORT", "443")
 QUEUE_NAME = os.environ.get("QUEUE_NAME", "random-number-generator-challenge-220302f3-e640-45b8-855d-ac73d5f6ba14")
 
@@ -42,7 +44,7 @@ DEPLOYED_SUBMISSIONS = set()
 DEPLOYMENT_NAME = randomString(6)
 
 
-def create_deployment_object(image, submission):
+def create_deployment_object(image, submission, message):
     # Configure Pod template container
     e = client.V1EnvVar(
         name="PYTHONUNBUFFERED",
@@ -56,6 +58,10 @@ def create_deployment_object(image, submission):
         name="DJANGO_SERVER",
         value=DJANGO_SERVER
     )
+    e_env_ids = client.V1EnvVar(
+        name="BODY",
+        value=str(message)
+    )
     agent_container = client.V1Container(
         name="agent",
         image=image,
@@ -64,7 +70,7 @@ def create_deployment_object(image, submission):
     environment_container = client.V1Container(
         name="environment",
         image="vkartik97/env:latest",
-        env=[e, e_env, e_env_url]
+        env=[e, e_env, e_env_url, e_env_ids]
     )
     # Create and configurate a spec section
     template = client.V1PodTemplateSpec(
@@ -104,7 +110,8 @@ def process_submission_callback(message, api):
     api.update_submission_status(submission_data, message["challenge_pk"])
     dep = create_deployment_object(
         message["submitted_image_uri"],
-        message["submission_pk"]
+        message["submission_pk"],
+        message
     )
     create_deployment(extensions_v1beta1, dep)
     # print(create_deployment_object())
