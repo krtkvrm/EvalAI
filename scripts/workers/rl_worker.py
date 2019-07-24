@@ -33,11 +33,11 @@ class GracefulKiller:
 
 logger = logging.getLogger(__name__)
 
-AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
-ENVIRONMENT_IMAGE = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
-DJANGO_SERVER = os.environ.get("DJANGO_SERVER", "https://hard-treefrog-35.localtunnel.me")
+AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "158c174566c2259e3f1701e7ac5633ee0b19a3b2")
+# ENVIRONMENT_IMAGE = os.environ.get("AUTH_TOKEN", "04ba82647ca42da7e24247001ed83d6a5e9002a3")
+DJANGO_SERVER = os.environ.get("DJANGO_SERVER", "https://quiet-lion-99.localtunnel.me")
 DJANGO_SERVER_PORT = os.environ.get("DJANGO_SERVER_PORT", "443")
-QUEUE_NAME = os.environ.get("QUEUE_NAME", "random-number-generator-challenge-220302f3-e640-45b8-855d-ac73d5f6ba14")
+QUEUE_NAME = os.environ.get("QUEUE_NAME", "test-docker-79165a9e-d672-4178-ba44-f3a87f0d6c71")
 
 DEPLOYED_SUBMISSIONS = set()
 
@@ -125,7 +125,8 @@ def main():
         DJANGO_SERVER_PORT=DJANGO_SERVER_PORT,
         QUEUE_NAME=QUEUE_NAME,
     )
-    # print(api.get_challenge_by_queue_name())
+    print(api.get_challenge_by_queue_name())
+    # print()
     print("String RL Worker for {}".format(api.get_challenge_by_queue_name()["title"]))
     killer = GracefulKiller()
     logger.info(
