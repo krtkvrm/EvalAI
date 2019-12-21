@@ -277,7 +277,7 @@ function startServer() {
         root: 'frontend/',
         port: 8888,
         host: '0.0.0.0',
-        livereload: true,
+        livereload: false,
         middleware: function(connect) {
             return [
                 connectModRewrite([
@@ -289,12 +289,12 @@ function startServer() {
 }
 
 function watch() {
-    gulp.watch('frontend/src/js/**/*.js', js);
-    gulp.watch('frontend/src/css/**/*.scss', css);
-    gulp.watch('frontend/src/views/web/**/*.html', html);
-    gulp.watch('frontend/src/images/**/*', images);
-    gulp.watch('bower_components/materialize/fonts/**/*', fonts);
-    gulp.watch('bower_components/materialize/fonts/**/*', fonts);
+    // gulp.watch('frontend/src/js/**/*.js', js);
+    // gulp.watch('frontend/src/css/**/*.scss', css);
+    // gulp.watch('frontend/src/views/web/**/*.html', html);
+    // gulp.watch('frontend/src/images/**/*', images);
+    // gulp.watch('bower_components/materialize/fonts/**/*', fonts);
+    // gulp.watch('bower_components/materialize/fonts/**/*', fonts);
 }
 
 

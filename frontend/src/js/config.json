@@ -1,7 +1,7 @@
 {
     "local": {
         "EnvironmentConfig": {
-            "API": "http://localhost:8000/api/"
+            "API": "http://54.210.170.99:8000/api/"
         }
     },
     "staging": {
